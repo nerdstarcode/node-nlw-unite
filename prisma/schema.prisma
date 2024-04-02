@@ -10,14 +10,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Event {
+  id               String  @id @unique @default(uuid())
+  public_id        Int     @unique @default(autoincrement())
+  title            String
+  details          String?
+  slug             String  @unique
+  maximumAttendees Int     @map("maximum_attendees")
+
+  @@map("events")
+}
+
 model User {
-  id          String        @id @default(uuid())
-  email       String        @unique
+  id          String   @id @default(uuid())
+  email       String   @unique
   name        String?
-  startedDate DateTime      @default(now())
-  updated_at  DateTime      @default(now())
-  active      Boolean       @default(true)
+  startedDate DateTime @default(now())
+  updated_at  DateTime @default(now())
+  active      Boolean  @default(true)
   discord     String
   nick        String
 }
-

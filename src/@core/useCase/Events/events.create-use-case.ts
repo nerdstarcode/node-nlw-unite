@@ -21,7 +21,7 @@ export class EventCreateUseCase {
           success: false,
           status: 400,
           data: {
-            message: `Already existis slug ${NewEvent.slug}`,
+            message: `Already exists slug ${NewEvent.slug}`,
             tip: 'Try new title for event'
           }
         }

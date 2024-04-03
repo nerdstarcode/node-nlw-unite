@@ -1,3 +1,4 @@
+import { Module } from '@nestjs/common';
 import { z } from 'zod';
 
 export const EventSchema = z.object({
@@ -19,3 +20,9 @@ export const CreateEventSchema = z.object({
 }).strict()
 
 export type CreateEventDTO = z.infer<typeof CreateEventSchema>
+
+@Module({
+    providers: [{ provide: 'EventSchema', useValue: EventSchema }],
+    exports: ['EventSchema'], // Export the schema provider
+})
+export class SchemaModule { }

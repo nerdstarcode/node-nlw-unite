@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Logger, Post, Query, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Post, Query, Req, Res, UseInterceptors } from '@nestjs/common';
 // import { MessagePattern } from '@nestjs/microservices';
 import { EventService } from './events.service';
+import { EventCreateInterceptor } from './Interceptors/create-event-validate.interceptor';
 
 const logger = new Logger('Events');
 
@@ -18,6 +19,7 @@ export class EventsController {
     })
 
   }
+  @UseInterceptors(EventCreateInterceptor)
   @Post('/')
   async createEvent(@Body() body, @Req() req, @Res() res) {
     logger.debug('Create Event')

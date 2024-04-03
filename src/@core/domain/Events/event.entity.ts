@@ -10,9 +10,17 @@ export class EventEntity {
     this.props = props;
     this.slug = this.title.toLowerCase().replace(' ', '-')
   }
-
+  static generateSlug(text: string) {
+    return text
+      .trim()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^\u\s-]/g, "")
+      .replace(/\s*/g, "-")
+  }
   static create(
-    props: Pick<Event, "title" | "details" | "maximumAttendees" | "slug">,
+    props: Omit<Event, "id" | "public_id">,
     newEvent = true,
   ) {
     CreateEventSchema.parse(props)

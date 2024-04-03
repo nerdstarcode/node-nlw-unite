@@ -3,33 +3,20 @@ import { DTOOutputService } from '../@core/DTO/response.service';
 import { RedisClient } from 'src/@core/infra/Redis/RedisClient';
 import { EventCreateUseCase } from 'src/@core/useCase/Events/events.create-use-case';
 import { CreateEventSchema, EventDTO, EventSchema } from 'src/@core/DTO/Events/events.dto';
-import { Event } from '@prisma/client';
+import { Attendee } from '@prisma/client';
+import { AttendeesRegistryUseCase } from 'src/@core/useCase/Attendees/attendees-registry-use-case';
+import { AttendeeDTO } from 'src/@core/DTO/Attendees/attendees.dto';
 
-const logger = new Logger('Module Name');
+const logger = new Logger('Attendees Service');
 
 @Injectable()
-export class EventService {
+export class AttendeesService {
   constructor(
-    private _eventCreateUseCase: EventCreateUseCase
+    private _attendeeRegistryUseCase: AttendeesRegistryUseCase
   ) { }
-
-  async example(): Promise<DTOOutputService> {
+  async registerAttendee(body: AttendeeDTO): Promise<DTOOutputService> {
     try {
-      return {
-        status: 200,
-        message: 'success',
-      }
-    } catch (err) {
-      return {
-        status: 400,
-        message: 'fail',
-      }
-    }
-
-  }
-  async createEvent(body: EventDTO): Promise<DTOOutputService> {
-    try {
-      const create = await this._eventCreateUseCase.execute(body as Event)
+      const create = await this._attendeeRegistryUseCase.execute(body as Attendee)
       return {
         status: create.status,
         message: create.data,

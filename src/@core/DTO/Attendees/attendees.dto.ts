@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { EventSelectSchema } from '../Events/events.dto';
 
 export const AttendeeSchema = z.object({
     id: z.number().int().optional(),
@@ -12,6 +13,22 @@ export const AttendeeSchema = z.object({
     eventId: z.string().trim(),
 });
 export type AttendeeDTO = z.infer<typeof AttendeeSchema>
+
+export const AttendeeSelectSchema = z.object({
+    id: z.boolean().optional(),
+    email: z.boolean().optional(),
+    name: z.boolean().optional(),
+    active: z.boolean().optional(),
+    discord: z.boolean().optional(),
+    nick: z.boolean().optional(),
+    updatedAt: z.boolean().optional(),
+    createdAt: z.boolean().optional(),
+    eventId: z.boolean().optional(),
+    event: z.object({
+        select: EventSelectSchema.optional()
+    }).optional()
+});
+export type AttendeeSelectDTO = z.infer<typeof AttendeeSelectSchema>
 
 export const CreateAttendeeSchema = z.object({
     email: z.string().email(),

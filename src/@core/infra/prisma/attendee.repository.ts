@@ -1,6 +1,6 @@
 import { Prisma, PrismaClient, Attendee } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
-import { AttendeeDTO } from 'src/@core/DTO/Attendees/attendees.dto';
+import { AttendeeDTO, AttendeeSelectDTO } from 'src/@core/DTO/Attendees/attendees.dto';
 import { AttendeeInterface } from 'src/@core/domain/Attendees/attendees.repository';
 export class AttendeePrismaRepository implements AttendeeInterface {
   private useOrmRepo: Prisma.AttendeeDelegate<DefaultArgs>
@@ -13,8 +13,9 @@ export class AttendeePrismaRepository implements AttendeeInterface {
     return await this.useOrmRepo.create({ data: attendee });
   }
 
-  async findOne(id: number): Promise<Attendee> {
+  async findOne(id: number, select?: AttendeeSelectDTO): Promise<Attendee> {
     return await this.useOrmRepo.findUnique({
+      select: select!,
       where: { id: id },
     });
   }
@@ -58,7 +59,7 @@ export class AttendeePrismaRepository implements AttendeeInterface {
   async countTotal() {
     return await this.useOrmRepo.count();
   }
-  
+
   async countAmountOfAttendeesForEvent(eventId: string) {
     return await this.useOrmRepo.count({ where: { eventId } });
   }

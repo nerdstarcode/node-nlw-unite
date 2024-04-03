@@ -1,7 +1,7 @@
 import { EventInterface } from 'src/@core/domain/Events/event.repository';
 import { Prisma, PrismaClient, Event } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
-import { EventDTO } from 'src/@core/DTO/Events/events.dto';
+import { EventDTO, EventSelectDTO } from 'src/@core/DTO/Events/events.dto';
 export class EventPrismaRepository implements EventInterface {
   private useOrmRepo: Prisma.EventDelegate<DefaultArgs>
   constructor() {
@@ -13,8 +13,9 @@ export class EventPrismaRepository implements EventInterface {
     return await this.useOrmRepo.create({ data: event });
   }
 
-  async findOne(id: string): Promise<Event> {
+  async findOne(id: string, select?: EventSelectDTO): Promise<Event> {
     return await this.useOrmRepo.findUnique({
+      select: select!,
       where: { id: id },
     });
   }

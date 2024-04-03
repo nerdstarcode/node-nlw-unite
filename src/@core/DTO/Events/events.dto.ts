@@ -11,6 +11,21 @@ export const EventSchema = z.object({
 }).strict()
 
 export type EventDTO = z.infer<typeof EventSchema>
+export const EventSelectSchema = z.object({
+    id: z.boolean().optional(),
+    public_id: z.boolean().optional(),
+    title: z.boolean().optional(),
+    details: z.boolean().optional(),
+    slug: z.boolean().optional(),
+    maximumAttendees: z.boolean().optional(),
+    _count: z.object({
+        select: z.object({
+            attendees: z.boolean().optional()
+        }).optional()
+    }).optional()
+}).strict()
+
+export type EventSelectDTO = z.infer<typeof EventSelectSchema>
 
 export const CreateEventSchema = z.object({
     title: z.string().trim(),

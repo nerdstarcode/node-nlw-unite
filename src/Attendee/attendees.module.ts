@@ -8,6 +8,8 @@ import { AttendeePrismaRepository } from 'src/@core/infra/prisma/attendee.reposi
 import { EventPrismaRepository } from 'src/@core/infra/prisma/event.repository';
 import { AttendeeBadgeInterceptor } from './Interceptors/get-attendee-badge.interceptor';
 import { AttendeesListUseCase } from 'src/@core/useCase/Attendees/attendees-list.use-case';
+import { CheckInUseCase } from 'src/@core/useCase/Attendees/attendees-check-in.use-case';
+import { CheckInPrismaRepository } from 'src/@core/infra/prisma/check-in.repository';
 
 @Module({
   imports: [SchemaModule],
@@ -25,6 +27,12 @@ import { AttendeesListUseCase } from 'src/@core/useCase/Attendees/attendees-list
       provide: AttendeesListUseCase,
       useFactory: () => {
         return new AttendeesListUseCase(new AttendeePrismaRepository, new EventPrismaRepository)
+      }
+    },
+    {
+      provide: CheckInUseCase,
+      useFactory: () => {
+        return new CheckInUseCase(new AttendeePrismaRepository, new CheckInPrismaRepository, new EventPrismaRepository)
       }
     },
   ],

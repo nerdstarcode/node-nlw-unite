@@ -7,6 +7,7 @@ import { Attendee } from '@prisma/client';
 import { AttendeesRegistryUseCase } from 'src/@core/useCase/Attendees/attendees-registry.use-case';
 import { AttendeeDTO } from 'src/@core/DTO/Attendees/attendees.dto';
 import { AttendeesListUseCase } from 'src/@core/useCase/Attendees/attendees-list.use-case';
+import { CheckInUseCase } from 'src/@core/useCase/Attendees/attendees-check-in.use-case';
 
 const logger = new Logger('Attendees Service');
 
@@ -15,6 +16,7 @@ export class AttendeesService {
   constructor(
     private _attendeeRegistryUseCase: AttendeesRegistryUseCase,
     private _attendeeListUseCase: AttendeesListUseCase,
+    private _attendeeCheckInUseCase: CheckInUseCase,
   ) { }
   async registerAttendee(body: AttendeeDTO): Promise<DTOOutputService> {
     try {
@@ -35,6 +37,23 @@ export class AttendeesService {
   async getAttendeeBadge({ attendeeId }: { attendeeId: number }): Promise<DTOOutputService> {
     try {
       const response = await this._attendeeListUseCase.getBadgeById(Number(attendeeId))
+      return {
+        status: response.status,
+        message: response.data,
+      }
+
+    } catch (err) {
+      return {
+        status: 400,
+        message: err.message,
+      }
+    }
+
+  }
+
+  async checkInAttendee({ attendeeId }: { attendeeId: number }): Promise<DTOOutputService> {
+    try {
+      const response = await this._attendeeCheckInUseCase.execute(Number(attendeeId))
       return {
         status: response.status,
         message: response.data,

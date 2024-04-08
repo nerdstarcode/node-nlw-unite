@@ -33,6 +33,19 @@ export class AttendeesController {
       console.error(err)
       res.status(500).json({ message: 'Internal Server Error' })
     })
+  }
+
+  @UseInterceptors(AttendeeBadgeInterceptor)
+  @Post('/:attendeeId/check-in')
+  async attendeeCheckIn(@Body() body, @Req() req, @Res() res, @Param() param) {
+    logger.debug('Checkin Attendee')
+    const receive = { ...param }
+    await this._attendeesService.checkInAttendee(receive).then((response) => {
+      res.status(response.status).json({ data: response.message.data || response.message, meta: { ...response.message.meta, } })
+    }).catch(err => {
+      console.error(err)
+      res.status(500).json({ message: 'Internal Server Error' })
+    })
 
   }
 

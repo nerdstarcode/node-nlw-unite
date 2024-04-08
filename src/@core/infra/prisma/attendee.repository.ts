@@ -26,8 +26,25 @@ export class AttendeePrismaRepository implements AttendeeInterface {
     });
   }
 
-  async findAll(page: number, limit: number): Promise<Attendee[]> {
-    return await this.useOrmRepo.findMany({ skip: page * limit, take: limit });
+  async findAll(page: number, limit: number, select?: Attendee): Promise<any[]> {
+    return await this.useOrmRepo.findMany(
+      {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          checkIn: { select: { createdAt: true } },
+        },
+        skip: (page - 1) * limit,
+        take: limit,
+        where: {
+          ...select,
+          name: { contains: select?.name! }!
+        },
+        orderBy: {
+          createdAt: 'asc'
+        }
+      });
   }
 
   async update(id: number, data: Attendee): Promise<Attendee | boolean> {
@@ -56,8 +73,13 @@ export class AttendeePrismaRepository implements AttendeeInterface {
     return true;
   }
 
-  async countTotal() {
-    return await this.useOrmRepo.count();
+  async countTotal(select?: Attendee) {
+    return await this.useOrmRepo.count({
+      where: {
+        ...select,
+        name: { contains: select?.name! }!
+      }
+    });
   }
 
   async countAmountOfAttendeesForEvent(eventId: string) {

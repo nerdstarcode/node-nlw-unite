@@ -8,6 +8,8 @@ import { ZodSchema } from 'zod';
 import { EventCreateInterceptor } from './Interceptors/create-event-validate.interceptor';
 import { EventListOneInterceptor } from './Interceptors/list-event-validate.interceptor';
 import { EventListUseCase } from 'src/@core/useCase/Events/events-list.use-case';
+import { AttendeesListUseCase } from 'src/@core/useCase/Attendees/attendees-list.use-case';
+import { AttendeePrismaRepository } from 'src/@core/infra/prisma/attendee.repository';
 
 @Module({
   imports: [SchemaModule],
@@ -25,6 +27,12 @@ import { EventListUseCase } from 'src/@core/useCase/Events/events-list.use-case'
       provide: EventListUseCase,
       useFactory: () => {
         return new EventListUseCase(new EventPrismaRepository)
+      }
+    },
+    {
+      provide: AttendeesListUseCase,
+      useFactory: () => {
+        return new AttendeesListUseCase(new AttendeePrismaRepository, new EventPrismaRepository)
       }
     },
   ],

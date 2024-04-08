@@ -32,7 +32,7 @@ export type AttendeeSelectDTO = z.infer<typeof AttendeeSelectSchema>
 
 export const CreateAttendeeSchema = z.object({
     email: z.string().email(),
-    name: z.string().trim().optional(),
+    name: z.string().trim(),
     active: z.boolean().default(true),
     discord: z.string().trim(),
     nick: z.string().trim(),
@@ -41,3 +41,17 @@ export const CreateAttendeeSchema = z.object({
 }).strict()
 
 export type CreateAttendeeDTO = z.infer<typeof CreateAttendeeSchema>
+
+export const responseBadgeSchema = z.object({
+    data: z.object({
+        email: z.string().email(),
+        name: z.string().trim(),
+        checkInUrl: z.string().url()
+    }),
+    meta: z.object({
+        event: z.object({
+            title: z.string()
+        })
+    })
+})
+export type responseBadgeDTO = z.infer<typeof responseBadgeSchema>
